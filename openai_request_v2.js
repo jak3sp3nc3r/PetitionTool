@@ -12,7 +12,7 @@ async function makeOpenAIRequest(prompt) {
             {
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer sk-proj-uTSFqJ4z03SWNPlyKGEQT3BlbkFJ16jZmMFaDxfv6crSS0Ug'
+                    'Authorization': 'Bearer sk-proj-ursF1QRNspjoPXq49ez9T3BlbkFJEOV9b8MTiuLhF9F5BHrp'
                 }
             }
         );
