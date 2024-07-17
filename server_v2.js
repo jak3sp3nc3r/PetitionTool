@@ -3,17 +3,16 @@ const bodyParser = require('body-parser');
 const path = require('path');
 
 const app = express();
-const PORT = process.env.PORT || 3000; // Use Heroku's dynamic port or default to 3000
+const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// Serve static files from the 'public' directory (if you have one)
-// Adjust the path according to your project structure
+// Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Serve petition form on the root URL
+// Routes
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'petition_form_v2.html')); // Replace with your HTML file path
 });
@@ -31,8 +30,7 @@ app.post('/submit', (req, res) => {
 
 // Handle 404 errors
 app.use((req, res, next) => {
-  // Customize the 404 error response
-  res.status(404).send("Sorry, the page you are looking for does not exist.");
+  res.status(404).sendFile('C:\\Users\\kodak\\OneDrive\\Desktop\\petition_v2\\thank_you.html');
 });
 
 // Start server
