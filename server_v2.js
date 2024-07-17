@@ -14,7 +14,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Routes
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'petition_form_v2.html')); // Replace with your HTML file path
+  res.sendFile(path.join(__dirname, 'petition_form_v2.html')); 
 });
 
 // Handle form submission
@@ -30,7 +30,7 @@ app.post('/submit', (req, res) => {
 
 // Handle 404 errors
 app.use((req, res, next) => {
-  res.status(404).sendFile('C:\\Users\\kodak\\OneDrive\\Desktop\\petition_v2\\thank_you.html');
+  res.sendFile(path.join(__dirname, 'thank_you.html'));
 });
 
 // Start server

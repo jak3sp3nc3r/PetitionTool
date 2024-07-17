@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Petition Form</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+    }
+    .container {
+        max-width: 600px;
+        margin: auto;
+        padding: 20px;
+        background: #f9f9f9;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+    h1 {
+        font-size: 24px;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    h2 {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    .form-group {
+        margin-bottom: 20px;
+    }
+    label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+    input[type="text"], textarea {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-size: 16px;
+    }
+    textarea {
+        height: 100px;
+    }
+    .btn {
+        display: inline-block;
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        font-size: 16px;
+        margin-top: 10px;
+        cursor: pointer;
+        border: none;
+        border-radius: 4px;
+    }
+    .btn-secondary {
+        background-color: #ccc;
+    }
+    .response-container {
+        margin-top: 20px;
+        border: 1px solid #ccc;
+        padding: 10px;
+        border-radius: 4px;
+    }
+    .disclaimer {
+        font-size: 12px;
+        margin-top: 20px;
+        color: #777;
+    }
+    .submit-message {
+        font-style: italic;
+        color: #666;
+        margin-top: 10px;
+    }
+    .success-message {
+        color: green;
+        margin-top: 20px;
+        text-align: center;
+    }
+    .error-message {
+        color: red;
+        margin-top: 20px;
+        text-align: center;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>Support Overturning the Ban on Mall Cops</h1>
+    
+    <!-- Petition Statement -->
+    <p>Fact: A recent ban on mall cops has threatened the safety and security of our shopping centers. We propose a new bill to overturn this ban and restore peace of mind to shoppers. Sign below to support!</p>
+
+    <!-- Form -->
+    <form id="petitionForm">
+        <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input type="text" id="firstName" name="firstName" required>
+        </div>
+        <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input type="text" id="lastName" name="lastName" required>
+        </div>
+        <div class="form-group">
+            <label for="city">City</label>
+            <input type="text" id="city" name="city" required>
+        </div>
+        <div class="form-group">
+            <label for="state">State</label>
+            <input type="text" id="state" name="state" required>
+        </div>
+
+        <!-- Manual Call to Action -->
+        <div class="form-group">
+            <label for="callToAction">Manual Call to Action</label>
+            <textarea id="callToAction" name="callToAction" placeholder="Enter your call to action (optional)"></textarea>
+        </div>
+
+        <!-- Keywords Section -->
+        <div class="form-group">
+            <h2>5 - 10 Key Words or Phrases of Support</h2>
+            <label for="keywords">Enter keywords</label>
+            <input type="text" id="keywords" name="keywords" required>
+        </div>
+
+        <!-- AI-generated Response -->
+        <div class="form-group">
+            <h2>Using the Power of AI to Generate a Unique Message of Support for the Petition</h2>
+            <div class="response-container" id="aiResponseDiv">
+                AI response will appear here.
+            </div>
+            <input type="hidden" id="aiResponseInput" name="aiResponse">
+        </div>
+
+        <!-- Buttons -->
+        <div class="form-group">
+            <button type="button" class="btn" id="generateBtn">Generate AI Response</button>
+            <button type="button" class="btn btn-secondary" id="regenerateBtn">Regenerate</button>
+            <button type="submit" class="btn btn-secondary" id="submitButton">Submit Petition</button>
+        </div>
+
+        <!-- Submit Message -->
+        <p class="submit-message" id="submitMessage"></p>
+
+        <!-- Disclaimer -->
+        <p class="disclaimer">
+            <strong>Disclaimer and Consent</strong><br>
+            By signing this petition, you acknowledge and consent to the following:<br><br>
+            
+            <strong>AI-Generated Response:</strong> You agree to allow Akorn Environmental Consulting, LLC to use an artificial intelligence (AI) tool to generate a unique call to action on your behalf. This AI-generated response will align with the goals of the petition and incorporate your input.<br><br>
+            
+            <strong>Responsibility and Liability:</strong> You understand and agree that Akorn Environmental Consulting, LLC, its clients, partners, and employees cannot be held responsible or liable for any content generated by the AI tool on your behalf. The AI-generated text is created based on the information provided and is not manually reviewed or edited by Akorn Environmental Consulting, LLC.<br><br>
+            
+            <strong>Accuracy and Representation:</strong> While the AI tool aims to accurately represent your input and the goals of the petition, Akorn Environmental Consulting, LLC makes no guarantees regarding the accuracy, completeness, or appropriateness of the AI-generated content. You acknowledge that the AI-generated call to action is a product of automated processes and may not reflect your views or intentions perfectly.<br><br>
+            
+            <strong>Use of Data:</strong> By participating in this petition, you consent to the use of your input data by Akorn Environmental Consulting, LLC for the purpose of generating the AI response. Your personal data will be handled in accordance with our privacy policy.<br><br>
+            
+            By signing below, you acknowledge that you have read, understood, and agreed to the terms outlined in this disclaimer.
+        </p>
+    </form>
+    <div id="response" class="success-message" style="display:none;">Thank you for signing the petition!</div>
+    <div id="error" class="error-message" style="display:none;">There was an error submitting the form. Please try again later.</div>
+</div>
+
+<script>
+    const generateBtn = document.getElementById('generateBtn');
+    const regenerateBtn = document.getElementById('regenerateBtn');
+    const submitButton = document.getElementById('submitButton');
+    const aiResponseDiv = document.getElementById('aiResponseDiv');
+    const aiResponseInput = document.getElementById('aiResponseInput');
+    const submitMessage = document.getElementById('submitMessage');
+    const responseDiv = document.getElementById('response');
+    const errorDiv = document.getElementById('error');
+    let submitClickCount = 0;
+
+    generateBtn.addEventListener('click', generateResponse);
+    regenerateBtn.addEventListener('click', generateResponse);
+
+    function generateResponse() {
+        const firstName = document.getElementById('firstName').value.trim();
+        const lastName = document.getElementById('lastName').value.trim();
+        const city = document.getElementById('city').value.trim();
+        const state = document.getElementById('state').value.trim();
+        const keywords = document.getElementById('keywords').value.trim();
+        const callToAction = document.getElementById('callToAction').value.trim();
+
+        const generatedResponse = `${firstName} ${lastName} from ${city}, ${state}. As a supporter of mall cops and the importance of ${keywords}, I believe in overturning this ban and ensuring our malls remain safe and secure for all shoppers. ${callToAction}`;
+
+        aiResponseDiv.textContent = generatedResponse;
+        aiResponseInput.value = generatedResponse;
+    }
+
+    document.getElementById('petitionForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        const formData = new FormData(this);
+        
+        fetch('https://docs.google.com/forms/d/e/1FAIpQLScKckWl2vEBFFx9JqMS_dENc2e38E9-Q6-mniZX9LZkPvTxLA/formResponse', {
+            method: 'POST',
+            body: new URLSearchParams(formData)
+        })
+        .then(response => {
+            if (response.ok) {
+                responseDiv.style.display = 'block';
+                errorDiv.style.display = 'none';
+            } else {
+                throw new Error('Network response was not ok.');
+            }
+        })
+        .catch(error => {
+            responseDiv.style.display = 'none';
+            errorDiv.style.display = 'block';
+        });
+    });
+
+    submitButton.addEventListener('click', () => {
+        submitClickCount++;
+        if (submitClickCount === 1) {
+            submitMessage.textContent = 'Please review the generated AI content above and click submit again to confirm.';
+            submitButton.textContent = 'Confirm Submission';
+            submitButton.classList.add('btn-secondary');
+        } else if (submitClickCount === 2) {
+            submitMessage.textContent = 'Submitting petition...';
+            submitButton.disabled = true; // Disable button to prevent multiple submissions
+        }
+    });
+</script>
+
+</body>
+</html>
