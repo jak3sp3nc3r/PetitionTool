@@ -9,10 +9,11 @@ const PORT = process.env.PORT || 3000; // Use Heroku's dynamic port or default t
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// Serve static files from the 'public' directory
+// Serve static files from the 'public' directory (if you have one)
+// Adjust the path according to your project structure
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Routes
+// Serve petition form on the root URL
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'petition_form_v2.html')); // Replace with your HTML file path
 });
@@ -30,7 +31,8 @@ app.post('/submit', (req, res) => {
 
 // Handle 404 errors
 app.use((req, res, next) => {
-  res.status(404).sendFile(path.join(__dirname, 'public', '404.html')); // Example 404 page
+  // Customize the 404 error response
+  res.status(404).send("Sorry, the page you are looking for does not exist.");
 });
 
 // Start server
