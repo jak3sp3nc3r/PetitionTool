@@ -79,6 +79,16 @@
         color: #666;
         margin-top: 10px;
     }
+    .success-message {
+        color: green;
+        margin-top: 20px;
+        text-align: center;
+    }
+    .error-message {
+        color: red;
+        margin-top: 20px;
+        text-align: center;
+    }
 </style>
 </head>
 <body>
@@ -89,7 +99,7 @@
     <p>Fact: A recent ban on mall cops has threatened the safety and security of our shopping centers. We propose a new bill to overturn this ban and restore peace of mind to shoppers. Sign below to support!</p>
 
     <!-- Form -->
-    <form id="petitionForm" action="/submit-petition" method="POST">
+    <form id="petitionForm">
         <div class="form-group">
             <label for="firstName">First Name</label>
             <input type="text" id="firstName" name="firstName" required>
@@ -155,6 +165,8 @@
             By signing below, you acknowledge that you have read, understood, and agreed to the terms outlined in this disclaimer.
         </p>
     </form>
+    <div id="response" class="success-message" style="display:none;">Thank you for signing the petition!</div>
+    <div id="error" class="error-message" style="display:none;">There was an error submitting the form. Please try again later.</div>
 </div>
 
 <script>
@@ -164,6 +176,8 @@
     const aiResponseDiv = document.getElementById('aiResponseDiv');
     const aiResponseInput = document.getElementById('aiResponseInput');
     const submitMessage = document.getElementById('submitMessage');
+    const responseDiv = document.getElementById('response');
+    const errorDiv = document.getElementById('error');
     let submitClickCount = 0;
 
     generateBtn.addEventListener('click', generateResponse);
@@ -183,6 +197,29 @@
         aiResponseInput.value = generatedResponse;
     }
 
+    document.getElementById('petitionForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        const formData = new FormData(this);
+        
+        fetch('https://docs.google.com/forms/d/e/1FAIpQLScKckWl2vEBFFx9JqMS_dENc2e38E9-Q6-mniZX9LZkPvTxLA/formResponse', {
+            method: 'POST',
+            body: new URLSearchParams(formData)
+        })
+        .then(response => {
+            if (response.ok) {
+                responseDiv.style.display = 'block';
+                errorDiv.style.display = 'none';
+            } else {
+                throw new Error('Network response was not ok.');
+            }
+        })
+        .catch(error => {
+            responseDiv.style.display = 'none';
+            errorDiv.style.display = 'block';
+        });
+    });
+
     submitButton.addEventListener('click', () => {
         submitClickCount++;
         if (submitClickCount === 1) {
@@ -192,7 +229,6 @@
         } else if (submitClickCount === 2) {
             submitMessage.textContent = 'Submitting petition...';
             submitButton.disabled = true; // Disable button to prevent multiple submissions
-            document.getElementById('petitionForm').submit();
         }
     });
 </script>
