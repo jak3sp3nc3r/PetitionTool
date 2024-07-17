@@ -9,15 +9,15 @@ const PORT = process.env.PORT || 3000; // Use Heroku's dynamic port or default t
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// Serve static files from the directory where petition_form_v2.html is located
-app.use(express.static(path.join(__dirname)));
+// Serve static files from the 'public' directory
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Routes
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'petition_form_v2.html')); // Serve your petition form
+  res.sendFile(path.join(__dirname, 'petition_form_v2.html')); // Replace with your HTML file path
 });
 
-// Handle form submission (example)
+// Handle form submission
 app.post('/submit', (req, res) => {
   const { firstName, lastName, city, state, keywords } = req.body;
 
