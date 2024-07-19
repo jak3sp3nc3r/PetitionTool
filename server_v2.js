@@ -14,7 +14,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Routes
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'petition_form_v2.html')); 
+  res.sendFile(path.join(__dirname, 'public', 'petition_form_v2.html')); 
+});
+
+app.get('/thank_you', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'thank_you.html'));
 });
 
 // Handle form submission
@@ -30,7 +34,7 @@ app.post('/submit', (req, res) => {
 
 // Handle 404 errors
 app.use((req, res, next) => {
-  res.sendFile(path.join(__dirname, 'thank_you.html'));
+  res.status(404).sendFile(path.join(__dirname, 'public', '404.html'));
 });
 
 // Start server
