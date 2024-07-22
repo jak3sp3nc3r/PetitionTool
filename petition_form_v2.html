@@ -96,7 +96,7 @@
     <h1>Support Overturning the Ban on Mall Cops</h1>
     
     <!-- Petition Statement -->
-    <p>Fact: A recent ban on mall cops has threatened the safety and security of our shopping centers. We propose a new bill to overturn this ban and restore peace of mind to shoppers. Sign below to support!</p>
+    <p id="petitionText">Fact: A recent ban on mall cops has threatened the safety and security of our shopping centers. We propose a new bill to overturn this ban and restore peace of mind to shoppers. Sign below to support!</p>
 
     <!-- Form -->
     <form id="petitionForm">
@@ -178,6 +178,7 @@
     const submitMessage = document.getElementById('submitMessage');
     const responseDiv = document.getElementById('response');
     const errorDiv = document.getElementById('error');
+    const petitionText = document.getElementById('petitionText').textContent.trim();
     let submitClickCount = 0;
 
     generateBtn.addEventListener('click', generateResponse);
@@ -191,47 +192,56 @@
         const keywords = document.getElementById('keywords').value.trim();
         const callToAction = document.getElementById('callToAction').value.trim();
 
-        const generatedResponse = `${firstName} ${lastName} from ${city}, ${state}. As a supporter of mall cops and the importance of ${keywords}, I believe in overturning this ban and ensuring our malls remain safe and secure for all shoppers. ${callToAction}`;
-
-        aiResponseDiv.textContent = generatedResponse;
-        aiResponseInput.value = generatedResponse;
+        fetch('/submit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                firstName,
+                lastName,
+                city,
+                state,
+                keywords,
+                callToAction
+            })
+        })
+        .then(response => response.text())
+        .then(data => {
+            aiResponseDiv.textContent = data;
+            aiResponseInput.value = data;
+        })
+        .catch(error => {
+            aiResponseDiv.textContent = 'There was an error generating the response. Please try again.';
+        });
     }
 
     document.getElementById('petitionForm').addEventListener('submit', function(event) {
         event.preventDefault();
-        
+
+        if (submitClickCount > 0) {
+            alert('You have already submitted this form.');
+            return;
+        }
+
+        submitClickCount++;
+
         const formData = new FormData(this);
-        
-        fetch('https://docs.google.com/forms/d/e/1FAIpQLScKckWl2vEBFFx9JqMS_dENc2e38E9-Q6-mniZX9LZkPvTxLA/formResponse', {
+        const data = Object.fromEntries(formData);
+
+        fetch('https://docs.google.com/forms/d/e/1FAIpQLSc5A12T4cM7oa0N4WQLbZQ3cWzYm7G5EtZamzE4XHs8TcPMJg/formResponse', {
             method: 'POST',
-            body: new URLSearchParams(formData)
+            body: new URLSearchParams(data),
         })
-        .then(response => {
-            if (response.ok) {
-                responseDiv.style.display = 'block';
-                errorDiv.style.display = 'none';
-            } else {
-                throw new Error('Network response was not ok.');
-            }
+        .then(response => response.text())
+        .then(() => {
+            responseDiv.style.display = 'block';
+            submitMessage.textContent = 'Thank you for signing the petition!';
         })
         .catch(error => {
-            responseDiv.style.display = 'none';
             errorDiv.style.display = 'block';
         });
     });
-
-    submitButton.addEventListener('click', () => {
-        submitClickCount++;
-        if (submitClickCount === 1) {
-            submitMessage.textContent = 'Please review the generated AI content above and click submit again to confirm.';
-            submitButton.textContent = 'Confirm Submission';
-            submitButton.classList.add('btn-secondary');
-        } else if (submitClickCount === 2) {
-            submitMessage.textContent = 'Submitting petition...';
-            submitButton.disabled = true; // Disable button to prevent multiple submissions
-        }
-    });
 </script>
-
 </body>
 </html>
