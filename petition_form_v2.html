@@ -95,10 +95,8 @@
 <div class="container">
     <h1>Support Overturning the Ban on Mall Cops</h1>
     
-    <!-- Petition Statement -->
     <p id="petitionText">Fact: A recent ban on mall cops has threatened the safety and security of our shopping centers. We propose a new bill to overturn this ban and restore peace of mind to shoppers. Sign below to support!</p>
 
-    <!-- Form -->
     <form id="petitionForm">
         <div class="form-group">
             <label for="firstName">First Name</label>
@@ -117,20 +115,17 @@
             <input type="text" id="state" name="state" required>
         </div>
 
-        <!-- Manual Call to Action -->
         <div class="form-group">
             <label for="callToAction">Manual Call to Action</label>
             <textarea id="callToAction" name="callToAction" placeholder="Enter your call to action (optional)"></textarea>
         </div>
 
-        <!-- Keywords Section -->
         <div class="form-group">
             <h2>5 - 10 Key Words or Phrases of Support</h2>
             <label for="keywords">Enter keywords</label>
             <input type="text" id="keywords" name="keywords" required>
         </div>
 
-        <!-- AI-generated Response -->
         <div class="form-group">
             <h2>Using the Power of AI to Generate a Unique Message of Support for the Petition</h2>
             <div class="response-container" id="aiResponseDiv">
@@ -139,17 +134,14 @@
             <input type="hidden" id="aiResponseInput" name="aiResponse">
         </div>
 
-        <!-- Buttons -->
         <div class="form-group">
             <button type="button" class="btn" id="generateBtn">Generate AI Response</button>
             <button type="button" class="btn btn-secondary" id="regenerateBtn">Regenerate</button>
             <button type="submit" class="btn btn-secondary" id="submitButton">Submit Petition</button>
         </div>
 
-        <!-- Submit Message -->
         <p class="submit-message" id="submitMessage"></p>
 
-        <!-- Disclaimer -->
         <p class="disclaimer">
             <strong>Disclaimer and Consent</strong><br>
             By signing this petition, you acknowledge and consent to the following:<br><br>
@@ -192,7 +184,7 @@
         const keywords = document.getElementById('keywords').value.trim();
         const callToAction = document.getElementById('callToAction').value.trim();
 
-        fetch('/submit', {
+        fetch('/api/generate-response', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -206,10 +198,10 @@
                 callToAction
             })
         })
-        .then(response => response.text())
+        .then(response => response.json())
         .then(data => {
-            aiResponseDiv.textContent = data;
-            aiResponseInput.value = data;
+            aiResponseDiv.textContent = data.aiResponse;
+            aiResponseInput.value = data.aiResponse;
         })
         .catch(error => {
             aiResponseDiv.textContent = 'There was an error generating the response. Please try again.';
@@ -229,17 +221,26 @@
         const formData = new FormData(this);
         const data = Object.fromEntries(formData);
 
-        fetch('https://docs.google.com/forms/d/e/1FAIpQLSc5A12T4cM7oa0N4WQLbZQ3cWzYm7G5EtZamzE4XHs8TcPMJg/formResponse', {
+        fetch('https://docs.google.com/forms/d/e/1FAIpQLSc5A3_IpMf-YgBz3N9gAl7GZg7KXmhkXqISoU2OslV1gJVVg/viewform?usp=pp_url', {
             method: 'POST',
             body: new URLSearchParams(data),
         })
-        .then(response => response.text())
-        .then(() => {
-            responseDiv.style.display = 'block';
-            submitMessage.textContent = 'Thank you for signing the petition!';
+        .then(response => {
+            if (response.ok) {
+                responseDiv.style.display = 'block';
+                errorDiv.style.display = 'none';
+                submitMessage.textContent = 'Thank you for signing the petition!';
+                document.getElementById('petitionForm').reset();
+            } else {
+                responseDiv.style.display = 'none';
+                errorDiv.style.display = 'block';
+                submitMessage.textContent = 'There was an error submitting the form. Please try again later.';
+            }
         })
         .catch(error => {
+            responseDiv.style.display = 'none';
             errorDiv.style.display = 'block';
+            submitMessage.textContent = 'There was an error submitting the form. Please try again later.';
         });
     });
 </script>

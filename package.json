@@ -1,16 +1,15 @@
 {
-  "name": "petition_v2",
+  "name": "petition-form",
   "version": "1.0.0",
-  "main": "server_v2.js",
+  "description": "Petition form with AI-generated response",
+  "main": "server.js",
   "scripts": {
-    "start": "node server_v2.js"
+    "start": "node server.js"
   },
   "dependencies": {
-    "body-parser": "^1.19.0",
+    "axios": "^1.2.3",
     "cors": "^2.8.5",
-    "express": "^4.17.1"
-  },
-  "engines": {
-    "node": ">=14.0.0"
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2"
   }
 }
