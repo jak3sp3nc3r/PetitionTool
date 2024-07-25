@@ -1,14 +1,20 @@
 # Node modules directory 
 node_modules/ 
+
 # Environment variable file 
 .env 
+
 # Log files 
 *.log 
+
 # OS-specific files 
 .DS_Store 
 Thumbs.db 
+
 # IDE/editor-specific files 
 .vscode/ 
 .idea/ 
 *.swp 
-new petition key.txt 
+
+# Custom file ignored that might be sensitive or irrelevant
+new petition key.txt
