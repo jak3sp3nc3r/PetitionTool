@@ -22,9 +22,18 @@ app.post('/api/generate-response', async (req, res) => {
     const { firstName, lastName, city, state, keywords, callToAction } = req.body;
 
     try {
-        const response = await axios.post('https://api.openai.com/v1/completions', {
-            model: 'text-davinci-003',
-            prompt: `Generate a unique message of support for the petition based on the following details:\n\nFirst Name: ${firstName}\nLast Name: ${lastName}\nCity: ${city}\nState: ${state}\nKeywords: ${keywords}\nCall to Action: ${callToAction}\n\nMessage:`,
+        const response = await axios.post('https://api.openai.com/v1/chat/completions', {
+            model: 'gpt-3.5-turbo',
+            messages: [
+                {
+                    role: 'system',
+                    content: 'You are a helpful assistant.'
+                },
+                {
+                    role: 'user',
+                    content: `Generate a unique message of support for the petition based on the following details:\n\nFirst Name: ${firstName}\nLast Name: ${lastName}\nCity: ${city}\nState: ${state}\nKeywords: ${keywords}\nCall to Action: ${callToAction}\n\nMessage:`
+                }
+            ],
             max_tokens: 150,
             temperature: 0.7
         }, {
@@ -34,7 +43,7 @@ app.post('/api/generate-response', async (req, res) => {
             }
         });
 
-        const aiResponse = response.data.choices[0].text.trim();
+        const aiResponse = response.data.choices[0].message.content.trim();
         res.json({ aiResponse });
     } catch (error) {
         console.error('Error generating response:', error);
