@@ -1,4 +1,5 @@
 const axios = require('axios');
+require('dotenv').config(); // Ensure dotenv is correctly required
 
 async function makeOpenAIRequest(prompt) {
     try {
@@ -12,13 +13,19 @@ async function makeOpenAIRequest(prompt) {
             {
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer sk-proj-ursF1QRNspjoPXq49ez9T3BlbkFJEOV9b8MTiuLhF9F5BHrp'
+                    'Authorization': `Bearer ${process.env.OPENAI_API_KEY}` // Use the API key from .env
                 }
             }
         );
-        return response.data.choices[0].message.content;
+
+        // Check if choices and message are present
+        if (response.data.choices && response.data.choices.length > 0) {
+            return response.data.choices[0].message.content;
+        } else {
+            throw new Error('Invalid response format');
+        }
     } catch (error) {
-        console.error('Error making OpenAI request:', error);
+        console.error('Error making OpenAI request:', error.message || error);
         throw error;
     }
 }
